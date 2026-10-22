@@ -1,0 +1,17 @@
+minVersion: 2.14.0
+changelog: CHANGELOG.md
+changelogPolicy: auto
+github:
+  owner: getsentry
+  repo: viewercontext
+artifactProvider:
+  name: github
+requireNames:
+  - /^sentry_viewercontext-.*-py3-none-any\.whl$/
+  - /^sentry_viewercontext-.*\.tar\.gz$/
+targets:
+  - name: github
+  - name: pypi
+  - name: sentry-pypi
+    internalPypiRepo: getsentry/pypi
+  - name: crates

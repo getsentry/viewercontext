@@ -1,0 +1,69 @@
+{
+  "valid": [
+    {
+      "name": "user",
+      "wire": {"version": 2, "actor": {"type": "user", "id": 42}, "organization_id": 1, "project_id": 7}
+    },
+    {
+      "name": "user_with_superuser",
+      "wire": {"version": 2, "actor": {"type": "user", "id": 42, "superuser": {"expires_at": 1800000000}}, "organization_id": 1}
+    },
+    {
+      "name": "service_account",
+      "wire": {"version": 2, "actor": {"type": "service_account", "id": 9001}, "organization_id": 1}
+    },
+    {
+      "name": "delegated_agent",
+      "wire": {"version": 2, "actor": {"type": "agent", "delegated_user_id": 42}, "organization_id": 1}
+    },
+    {
+      "name": "independent_agent",
+      "wire": {"version": 2, "actor": {"type": "agent", "id": 5}, "organization_id": 1}
+    },
+    {
+      "name": "system_global",
+      "wire": {"version": 2, "actor": {"type": "system"}}
+    },
+    {
+      "name": "integration",
+      "wire": {"version": 2, "actor": {"type": "integration", "id": 3}, "organization_id": 1}
+    },
+    {
+      "name": "unknown_org_scoped",
+      "wire": {"version": 2, "actor": {"type": "unknown"}, "organization_id": 1}
+    },
+    {
+      "name": "early_adopter",
+      "wire": {"version": 2, "actor": {"type": "user", "id": 42}, "organization_id": 1, "organization_is_early_adopter": true}
+    }
+  ],
+  "ignored_keys": [
+    {
+      "name": "jwt_registered_claims",
+      "wire": {"version": 2, "actor": {"type": "user", "id": 42}, "organization_id": 1, "iat": 1, "exp": 2, "iss": "sentry"},
+      "canonical": {"version": 2, "actor": {"type": "user", "id": 42}, "organization_id": 1}
+    },
+    {
+      "name": "early_adopter_false_is_omitted",
+      "wire": {"version": 2, "actor": {"type": "system"}, "organization_is_early_adopter": false},
+      "canonical": {"version": 2, "actor": {"type": "system"}}
+    }
+  ],
+  "invalid": [
+    {"name": "not_an_object", "wire": [1, 2]},
+    {"name": "missing_version", "wire": {"actor": {"type": "user", "id": 42}}},
+    {"name": "v1_version", "wire": {"version": 1, "actor": {"type": "user", "id": 42}}},
+    {"name": "string_version", "wire": {"version": "2", "actor": {"type": "user", "id": 42}}},
+    {"name": "bool_version", "wire": {"version": true, "actor": {"type": "user", "id": 42}}},
+    {"name": "v1_user_id", "wire": {"version": 2, "actor": {"type": "user", "id": 42}, "user_id": 42}},
+    {"name": "v1_token", "wire": {"version": 2, "actor": {"type": "user", "id": 42}, "token": {"kind": "api_token"}}},
+    {"name": "missing_actor", "wire": {"version": 2, "organization_id": 1}},
+    {"name": "actor_without_type", "wire": {"version": 2, "actor": {"id": 42}}},
+    {"name": "unknown_actor_type", "wire": {"version": 2, "actor": {"type": "robot", "id": 42}}},
+    {"name": "string_actor_id", "wire": {"version": 2, "actor": {"type": "user", "id": "42"}}},
+    {"name": "float_organization_id", "wire": {"version": 2, "actor": {"type": "system"}, "organization_id": 1.5}},
+    {"name": "string_project_id", "wire": {"version": 2, "actor": {"type": "system"}, "organization_id": 1, "project_id": "7"}},
+    {"name": "string_superuser_expiry", "wire": {"version": 2, "actor": {"type": "user", "id": 42, "superuser": {"expires_at": "soon"}}}},
+    {"name": "non_bool_early_adopter", "wire": {"version": 2, "actor": {"type": "system"}, "organization_is_early_adopter": 1}}
+  ]
+}

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentry-viewercontext"
+version = "0.1.0"
+description = "Caller identity propagated between Sentry services"
+readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "Sentry", email = "oss@sentry.io" }]
+requires-python = ">=3.11"
+dependencies = ["PyJWT>=2.8"]
+
+[project.urls]
+Repository = "https://github.com/getsentry/viewercontext"
+
+[tool.setuptools]
+packages = ["viewercontext"]
+
+[tool.setuptools.package-data]
+viewercontext = ["py.typed"]
+
+[dependency-groups]
+dev = ["pytest>=8", "mypy>=1.10", "ruff>=0.6"]
+
+[tool.mypy]
+strict = true
+files = ["viewercontext", "tests", "scripts"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Fixture keys are short on purpose; the HS512 wrong-algorithm case trips this.
+filterwarnings = ["ignore::jwt.warnings.InsecureKeyLengthWarning"]
