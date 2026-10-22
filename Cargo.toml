@@ -6,7 +6,7 @@ description = "Caller identity propagated between Sentry services"
 repository = "https://github.com/getsentry/viewercontext"
 license = "Apache-2.0"
 edition = "2024"
-include = ["rust/src/**", "Cargo.toml", "README.md", "LICENSE"]
+include = ["/rust/src/**", "/Cargo.toml", "/README.md", "/LICENSE"]
 
 [lib]
 name = "viewercontext"
