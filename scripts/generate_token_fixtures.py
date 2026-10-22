@@ -7,8 +7,10 @@ checked against an independent producer.
 from __future__ import annotations
 
 import json
+import warnings
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 import jwt
 
@@ -32,7 +34,15 @@ def standard(**overrides: Any) -> dict[str, Any]:
     return {**CONTEXT, "iat": IAT, "exp": FAR_FUTURE, "iss": "sentry", **overrides}
 
 
+def encode_python() -> str:
+    # Frozen clock keeps the output stable, so CI can check fixtures match the generator.
+    with mock.patch("time.time", return_value=IAT):
+        return encode_jwt(ViewerContext.deserialize(CONTEXT), key=KEY, ttl=FAR_FUTURE - IAT)
+
+
 def main() -> None:
+    # Fixture keys are short on purpose; the HS512 wrong-algorithm case trips this.
+    warnings.filterwarnings("ignore", category=jwt.warnings.InsecureKeyLengthWarning)
     no_iat = standard()
     del no_iat["iat"]
     cases = [
@@ -46,7 +56,7 @@ def main() -> None:
         # This package's own encoder, so Rust is checked against the Python producer too.
         {
             "name": "valid_python_encoder",
-            "token": encode_jwt(ViewerContext.deserialize(CONTEXT), key=KEY, ttl=FAR_FUTURE),
+            "token": encode_python(),
             "context": CONTEXT,
         },
         {"name": "expired", "token": sign(standard(exp=IAT + 900))},
