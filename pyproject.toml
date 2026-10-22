@@ -9,8 +9,8 @@ description = "Caller identity propagated between Sentry services"
 readme = "README.md"
 license = "Apache-2.0"
 authors = [{ name = "Sentry", email = "oss@sentry.io" }]
-requires-python = ">=3.11"
-dependencies = ["PyJWT>=2.8"]
+requires-python = ">=3.13"
+dependencies = ["PyJWT>=2.13.0"]
 
 [project.urls]
 Repository = "https://github.com/getsentry/viewercontext"
@@ -22,9 +22,10 @@ packages = ["viewercontext"]
 viewercontext = ["py.typed"]
 
 [dependency-groups]
-dev = ["pytest>=8", "pytest-cov>=6", "mypy>=1.10", "ruff>=0.6"]
+dev = ["pytest>=9.0.3", "pytest-cov>=4.0.0", "mypy>=2.1.0", "ruff>=0.14.0"]
 
 [tool.mypy]
+python_version = "3.13"
 strict = true
 files = ["viewercontext", "tests", "scripts"]
 warn_unreachable = true
@@ -42,6 +43,12 @@ enable_error_code = [
 
 [tool.ruff]
 line-length = 100
+target-version = "py313"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
 
 [tool.ruff.lint]
 select = [
@@ -49,6 +56,7 @@ select = [
     "I",            # isort
     "UP",           # pyupgrade
     "B",            # bugbear
+    "LOG", "G",     # logging
     "S",            # bandit
     "C4",           # comprehensions
     "SIM",          # simplify

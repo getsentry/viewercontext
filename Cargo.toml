@@ -6,7 +6,6 @@ description = "Caller identity propagated between Sentry services"
 repository = "https://github.com/getsentry/viewercontext"
 license = "Apache-2.0"
 edition = "2024"
-rust-version = "1.88"
 include = ["/rust/src/**", "/Cargo.toml", "/README.md", "/LICENSE"]
 
 [lib]
@@ -27,7 +26,9 @@ path = "rust/tests/conformance.rs"
 [lints.rust]
 unsafe_code = "forbid"
 missing_docs = "warn"
-unreachable_pub = "warn"
 
 [lints.clippy]
-pedantic = { level = "warn", priority = -1 }
+dbg_macro = "warn"
+print_stdout = "warn"
+print_stderr = "warn"
+str_to_string = "warn"

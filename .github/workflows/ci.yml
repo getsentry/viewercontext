@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.11", "3.12", "3.13", "3.14"]
+        python: ["3.13", "3.14"]  # Sentry runs 3.13, Seer 3.14
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -46,24 +46,15 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - run: cargo fmt --check
-      - run: cargo clippy --locked --all-targets -- -D warnings
-      - run: cargo test --locked
-      - run: cargo doc --locked --no-deps
+      # Latest stable, as other getsentry Rust projects build with.
+      - run: rustup toolchain install stable --profile minimal --component clippy,rustfmt && rustup default stable
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets --all-features --no-deps -- -D warnings
+      - run: cargo test --workspace --all-features --locked
+      - run: cargo doc --workspace --all-features --no-deps --document-private-items
         env:
-          RUSTDOCFLAGS: -D warnings
+          RUSTDOCFLAGS: -Dwarnings
       - run: cargo publish --locked --dry-run
-
-  rust-msrv:
-    name: "Rust MSRV"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
-          persist-credentials: false
-      - run: rustup toolchain install "$(grep -m1 '^rust-version' Cargo.toml | cut -d'"' -f2)" --profile minimal
-      - run: cargo +"$(grep -m1 '^rust-version' Cargo.toml | cut -d'"' -f2)" check --locked --all-targets
 
   workflows:
     name: "Workflow audit"

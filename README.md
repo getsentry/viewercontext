@@ -76,8 +76,8 @@ cargo test
 uv run python scripts/generate_token_fixtures.py  # after changing token cases
 ```
 
-CI additionally runs Python 3.11–3.14, the minimum supported Rust version (`rust-version` in
-`Cargo.toml`), `cargo doc` with warnings denied, and `cargo publish --dry-run`.
+CI additionally runs Python 3.13 and 3.14 (Sentry's and Seer's versions), Rust on latest
+stable, `cargo doc` with warnings denied, and `cargo publish --dry-run`.
 
 ## Releasing
 
