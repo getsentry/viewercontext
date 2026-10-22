@@ -63,6 +63,7 @@
     {"name": "string_actor_id", "wire": {"version": 2, "actor": {"type": "user", "id": "42"}}},
     {"name": "float_organization_id", "wire": {"version": 2, "actor": {"type": "system"}, "organization_id": 1.5}},
     {"name": "string_project_id", "wire": {"version": 2, "actor": {"type": "system"}, "organization_id": 1, "project_id": "7"}},
+    {"name": "superuser_not_object", "wire": {"version": 2, "actor": {"type": "user", "id": 42, "superuser": 1800000000}}},
     {"name": "string_superuser_expiry", "wire": {"version": 2, "actor": {"type": "user", "id": 42, "superuser": {"expires_at": "soon"}}}},
     {"name": "non_bool_early_adopter", "wire": {"version": 2, "actor": {"type": "system"}, "organization_is_early_adopter": 1}}
   ]

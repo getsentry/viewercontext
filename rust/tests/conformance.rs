@@ -1,4 +1,4 @@
-//! Shared fixtures; tests/test_conformance.py runs the same cases.
+//! Shared fixtures; `tests/test_conformance.py` runs the same cases.
 
 use serde_json::{Value, json};
 use viewercontext::{

@@ -16,11 +16,18 @@ makes the implementations disagree fails CI.
 ## Python
 
 ```python
-from viewercontext import Actor, ActorType, ViewerContext, decode_jwt, encode_jwt, viewer_context_scope
+from viewercontext import (
+    Actor,
+    ActorType,
+    ViewerContext,
+    decode_jwt,
+    encode_jwt,
+    viewer_context_scope,
+)
 
 ctx = ViewerContext(Actor(ActorType.SERVICE_ACCOUNT, actor_id=9), organization_id=1)
-token = encode_jwt(ctx, key=secret)                    # value for the X-Viewer-Context header
-ctx = decode_jwt(token, keys=[current, previous])     # picks the key by `kid`
+token = encode_jwt(ctx, key=secret)  # value for the X-Viewer-Context header
+ctx = decode_jwt(token, keys=[current, previous])  # picks the key by `kid`
 
 with viewer_context_scope(ctx):
     ...  # get_viewer_context() returns ctx here
@@ -62,10 +69,15 @@ signing keys come from) stays in that service.
 ## Development
 
 ```sh
-uv sync && uv run pytest && uv run mypy
+uv sync
+uvx prek install                                   # or pre-commit; runs ruff, mypy, rustfmt, clippy, zizmor
+uv run pytest --cov                                # 100% branch coverage required
 cargo test
 uv run python scripts/generate_token_fixtures.py  # after changing token cases
 ```
+
+CI additionally runs Python 3.11–3.14, the minimum supported Rust version (`rust-version` in
+`Cargo.toml`), `cargo doc` with warnings denied, and `cargo publish --dry-run`.
 
 ## Releasing
 

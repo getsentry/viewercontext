@@ -15,6 +15,7 @@ from viewercontext import (
     decode_jwt,
     encode_jwt,
     get_viewer_context,
+    is_jwt,
     key_id,
     verify_jwt,
     viewer_context_scope,
@@ -58,6 +59,12 @@ def test_superuser_caps_expiry() -> None:
     assert claims["exp"] - claims["iat"] == SUPERUSER_ACCESS_TTL
 
 
+def test_is_jwt() -> None:
+    assert is_jwt(encode_jwt(ViewerContext(Actor(ActorType.SYSTEM)), key=KEY))
+    assert not is_jwt('{"version": 2}')
+    assert not is_jwt("")
+
+
 def test_no_matching_key() -> None:
     token = encode_jwt(ViewerContext(Actor(ActorType.SYSTEM)), key=KEY)
     with pytest.raises(jwt.InvalidTokenError):
@@ -67,10 +74,16 @@ def test_no_matching_key() -> None:
 def test_scope_restores_previous() -> None:
     outer = ViewerContext(Actor(ActorType.SYSTEM))
     inner = ViewerContext(Actor(ActorType.USER, actor_id=1), organization_id=1)
+    seen = []
+
+    def fail_inside_inner() -> None:
+        with viewer_context_scope(inner):
+            seen.append(get_viewer_context())
+            raise RuntimeError
+
     with viewer_context_scope(outer):
         with pytest.raises(RuntimeError):
-            with viewer_context_scope(inner):
-                assert get_viewer_context() == inner
-                raise RuntimeError
+            fail_inside_inner()
         assert get_viewer_context() == outer
+    assert seen == [inner]
     assert get_viewer_context() is None

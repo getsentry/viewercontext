@@ -1,5 +1,6 @@
-//! Signed transport for ViewerContext: an HS256 JWT carried in the `X-Viewer-Context` header.
+//! Signed transport for `ViewerContext`: an HS256 JWT carried in the `X-Viewer-Context` header.
 
+use std::fmt::Write;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Header, Validation};
@@ -8,27 +9,44 @@ use sha2::{Digest, Sha256};
 
 use crate::{Error, ViewerContext};
 
+/// HTTP header carrying the token.
 pub const HEADER: &str = "X-Viewer-Context";
+/// Required `iss` claim.
 pub const ISSUER: &str = "sentry";
+/// Token lifetime in seconds.
 pub const DEFAULT_TTL: i64 = 900;
+/// Maximum lifetime in seconds of a token carrying superuser access.
 pub const SUPERUSER_ACCESS_TTL: i64 = 300;
-pub const DEFAULT_LEEWAY: i64 = 5;
+/// Clock skew tolerance in seconds.
+pub const DEFAULT_LEEWAY: u32 = 5;
 
 /// `kid` header value: lets receivers pick the right key during rotation.
+#[must_use]
 pub fn key_id(key: &str) -> String {
     let digest = Sha256::digest(key.as_bytes());
-    digest[..4].iter().map(|b| format!("{b:02x}")).collect()
+    digest[..4].iter().fold(String::new(), |mut out, b| {
+        let _ = write!(out, "{b:02x}");
+        out
+    })
 }
 
-fn now() -> f64 {
+fn since_epoch() -> std::time::Duration {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .expect("system clock before 1970")
-        .as_secs_f64()
 }
 
+/// Sign `ctx` as an HS256 JWT valid for `ttl` seconds.
+///
+/// # Errors
+///
+/// Fails only if serialization or signing fails.
+///
+/// # Panics
+///
+/// If the system clock is before 1970.
 pub fn encode_jwt(ctx: &ViewerContext, key: &str, ttl: i64) -> Result<String, Error> {
-    let now = now() as i64;
+    let now = i64::try_from(since_epoch().as_secs()).expect("timestamp fits in i64");
     let mut expires_at = now + ttl;
     if let Some(superuser) = ctx.actor.superuser {
         expires_at = expires_at
@@ -52,10 +70,15 @@ pub fn encode_jwt(ctx: &ViewerContext, key: &str, ttl: i64) -> Result<String, Er
 }
 
 /// Verify signature, `kid`, issuer and expiry; return all claims.
+///
+/// # Errors
+///
+/// Fails if no key matches the `kid`, or the token is malformed, mis-signed, expired or not yet
+/// valid.
 pub fn verify_jwt<K: AsRef<str>>(
     token: &str,
     keys: &[K],
-    leeway: i64,
+    leeway: u32,
 ) -> Result<Map<String, Value>, Error> {
     let kid = jsonwebtoken::decode_header(token)?.kid;
     let key = keys
@@ -83,7 +106,7 @@ pub fn verify_jwt<K: AsRef<str>>(
             .map(f64::trunc)
             .ok_or(Error::MissingClaim(name))
     };
-    let (now, leeway) = (now(), leeway as f64);
+    let (now, leeway) = (since_epoch().as_secs_f64(), f64::from(leeway));
     if timestamp("iat")? > now + leeway {
         return Err(Error::NotYetValid);
     }
@@ -93,10 +116,15 @@ pub fn verify_jwt<K: AsRef<str>>(
     Ok(claims)
 }
 
+/// [`verify_jwt`], then parse the claims as a [`ViewerContext`].
+///
+/// # Errors
+///
+/// Fails as [`verify_jwt`] does, or if the claims are not a valid context.
 pub fn decode_jwt<K: AsRef<str>>(
     token: &str,
     keys: &[K],
-    leeway: i64,
+    leeway: u32,
 ) -> Result<ViewerContext, Error> {
     ViewerContext::try_from(verify_jwt(token, keys, leeway)?)
 }

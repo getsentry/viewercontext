@@ -32,7 +32,7 @@ def test_ignored_keys_canonicalize(case: dict[str, Any]) -> None:
 
 @pytest.mark.parametrize("case", CONTEXTS["invalid"], ids=_ids(CONTEXTS["invalid"]))
 def test_invalid_rejected(case: dict[str, Any]) -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011 -- any ValueError is the contract
         ViewerContext.deserialize(case["wire"])
 
 

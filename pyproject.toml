@@ -22,19 +22,73 @@ packages = ["viewercontext"]
 viewercontext = ["py.typed"]
 
 [dependency-groups]
-dev = ["pytest>=8", "mypy>=1.10", "ruff>=0.6"]
+dev = ["pytest>=8", "pytest-cov>=6", "mypy>=1.10", "ruff>=0.6"]
 
 [tool.mypy]
 strict = true
 files = ["viewercontext", "tests", "scripts"]
+warn_unreachable = true
+enable_error_code = [
+    "deprecated",
+    "explicit-override",
+    "ignore-without-code",
+    "possibly-undefined",
+    "redundant-expr",
+    "redundant-self",
+    "truthy-bool",
+    "truthy-iterable",
+    "unused-awaitable",
+]
 
 [tool.ruff]
 line-length = 100
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B"]
+select = [
+    "E", "W", "F",  # pycodestyle, pyflakes
+    "I",            # isort
+    "UP",           # pyupgrade
+    "B",            # bugbear
+    "S",            # bandit
+    "C4",           # comprehensions
+    "SIM",          # simplify
+    "PIE",
+    "RET",
+    "PT",           # pytest style
+    "PL",           # pylint
+    "TID",          # tidy imports
+    "T20",          # no print
+    "ERA",          # commented-out code
+    "RUF",
+    "N",            # naming
+    "A",            # builtin shadowing
+    "DTZ",          # naive datetimes
+    "BLE",          # blind except
+    "FBT",          # boolean positional args
+    "TRY",
+    "PERF",
+]
+
+ignore = [
+    "TRY003",  # messages on stdlib exceptions are fine
+    "TRY004",  # deserialize() raises ValueError for any bad payload, type errors included
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "PLR2004"]
+"scripts/**" = ["S105"]
+
+[tool.coverage.run]
+branch = true
+source = ["viewercontext"]
+
+[tool.coverage.report]
+fail_under = 100
+show_missing = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = ["--strict-markers", "--strict-config", "-p", "no:cacheprovider"]
+xfail_strict = true
 # Fixture keys are short on purpose; the HS512 wrong-algorithm case trips this.
-filterwarnings = ["ignore::jwt.warnings.InsecureKeyLengthWarning"]
+filterwarnings = ["error", "ignore::jwt.warnings.InsecureKeyLengthWarning"]

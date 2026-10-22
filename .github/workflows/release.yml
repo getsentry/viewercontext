@@ -7,11 +7,14 @@ on:
         description: Version to release (or "auto")
         required: false
 
+permissions: {}
+
 jobs:
   release:
     permissions:
       contents: write
-    uses: getsentry/craft/.github/workflows/release.yml@v2
+    uses: getsentry/craft/.github/workflows/release.yml@0ff75896d43285ca376c7254e8143bac23acd429 # v2
     with:
       version: ${{ inputs.version }}
-    secrets: inherit
+    # Craft reads SENTRY_RELEASE_BOT_PRIVATE_KEY without declaring it, so it must be inherited.
+    secrets: inherit # zizmor: ignore[secrets-inherit]

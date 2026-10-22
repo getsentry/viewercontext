@@ -6,24 +6,35 @@ on:
       - release/**
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   python:
     name: "Python ${{ matrix.python }}"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
+      fail-fast: false
       matrix:
         python: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - uses: astral-sh/setup-uv@884ad927a57e558e7a70b92f2bccf9198a4be546 # v6
         with:
           python-version: ${{ matrix.python }}
+          enable-cache: false
       - run: uv sync --locked
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy
-      - run: uv run pytest -vv
+      - run: uv run pytest -vv --cov
       # Fixtures must be what the generator produces, or the two implementations drift unnoticed.
       - run: uv run python scripts/generate_token_fixtures.py && git diff --exit-code fixtures/
 
@@ -33,8 +44,36 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2.8.0
+        with:
+          persist-credentials: false
       - run: cargo fmt --check
-      - run: cargo clippy --all-targets -- -D warnings
-      - run: cargo test
-      - run: cargo publish --dry-run
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      - run: cargo test --locked
+      - run: cargo doc --locked --no-deps
+        env:
+          RUSTDOCFLAGS: -D warnings
+      - run: cargo publish --locked --dry-run
+
+  rust-msrv:
+    name: "Rust MSRV"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+      - run: rustup toolchain install "$(grep -m1 '^rust-version' Cargo.toml | cut -d'"' -f2)" --profile minimal
+      - run: cargo +"$(grep -m1 '^rust-version' Cargo.toml | cut -d'"' -f2)" check --locked --all-targets
+
+  workflows:
+    name: "Workflow audit"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@884ad927a57e558e7a70b92f2bccf9198a4be546 # v6
+        with:
+          enable-cache: false
+      - run: uvx zizmor@1.31.1 --offline .github/workflows
