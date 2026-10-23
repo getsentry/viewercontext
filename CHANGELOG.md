@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
 
 - `Actor.user_id` returns `delegated_user_id` only for agents; other non-user actors return `None`.
 
