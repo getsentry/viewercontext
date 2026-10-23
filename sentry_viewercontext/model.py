@@ -46,7 +46,11 @@ class Actor:
     @property
     def user_id(self) -> int | None:
         """The human behind this actor: the user itself, or the user an agent acts for."""
-        return self.actor_id if self.type == ActorType.USER else self.delegated_user_id
+        if self.type == ActorType.USER:
+            return self.actor_id
+        if self.type == ActorType.AGENT:
+            return self.delegated_user_id
+        return None
 
     def serialize(self) -> dict[str, Any]:
         result: dict[str, Any] = {"type": self.type.value}

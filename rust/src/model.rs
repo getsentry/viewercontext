@@ -85,7 +85,8 @@ impl Actor {
     pub fn user_id(&self) -> Option<i64> {
         match self.actor_type {
             ActorType::User => self.actor_id,
-            _ => self.delegated_user_id,
+            ActorType::Agent => self.delegated_user_id,
+            _ => None,
         }
     }
 }
