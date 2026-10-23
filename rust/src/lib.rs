@@ -1,6 +1,6 @@
 //! Caller identity propagated between Sentry services.
 //!
-//! Mirrors the `viewercontext` Python package; `fixtures/` keeps the two in agreement.
+//! Mirrors the `sentry_viewercontext` Python package; `fixtures/` keeps the two in agreement.
 
 mod model;
 mod token;

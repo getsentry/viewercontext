@@ -7,8 +7,8 @@ One repo, two native implementations released together under one version:
 
 | | Package | Import |
 |---|---|---|
-| Python | `sentry-viewercontext` (PyPI, internal PyPI) | `import viewercontext` |
-| Rust | `sentry-viewercontext` (crates.io) | `use viewercontext::...` |
+| Python | `sentry-viewercontext` (PyPI, internal PyPI) | `import sentry_viewercontext` |
+| Rust | `sentry-viewercontext` (crates.io) | `use sentry_viewercontext::...` |
 
 `fixtures/` holds the wire contract. Both test suites run every case in it, so a change that
 makes the implementations disagree fails CI.
@@ -16,7 +16,7 @@ makes the implementations disagree fails CI.
 ## Python
 
 ```python
-from viewercontext import (
+from sentry_viewercontext import (
     Actor,
     ActorType,
     ViewerContext,
@@ -36,7 +36,7 @@ with viewer_context_scope(ctx):
 ## Rust
 
 ```rust
-use viewercontext::{Actor, ActorType, ViewerContext, decode_jwt, encode_jwt, DEFAULT_LEEWAY, DEFAULT_TTL};
+use sentry_viewercontext::{Actor, ActorType, ViewerContext, decode_jwt, encode_jwt, DEFAULT_LEEWAY, DEFAULT_TTL};
 
 let mut ctx = ViewerContext::new(Actor::new(ActorType::ServiceAccount, Some(9)));
 ctx.organization_id = Some(1);

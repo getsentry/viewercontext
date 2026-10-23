@@ -9,7 +9,6 @@ edition = "2024"
 include = ["/rust/src/**", "/Cargo.toml", "/README.md", "/LICENSE"]
 
 [lib]
-name = "viewercontext"
 path = "rust/src/lib.rs"
 
 [dependencies]

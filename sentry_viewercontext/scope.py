@@ -4,7 +4,7 @@ import contextlib
 import contextvars
 from collections.abc import Generator
 
-from viewercontext.model import ViewerContext
+from sentry_viewercontext.model import ViewerContext
 
 # Owned here so shared clients (HTTP, RPC, tasks) can propagate the current viewer
 # without importing service code.

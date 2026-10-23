@@ -5,7 +5,7 @@ import time
 import jwt
 import pytest
 
-from viewercontext import (
+from sentry_viewercontext import (
     SUPERUSER_ACCESS_TTL,
     Actor,
     ActorId,

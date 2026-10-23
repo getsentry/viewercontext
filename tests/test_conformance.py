@@ -9,7 +9,7 @@ from typing import Any
 import jwt
 import pytest
 
-from viewercontext import ViewerContext, decode_jwt
+from sentry_viewercontext import ViewerContext, decode_jwt
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 CONTEXTS = json.loads((FIXTURES / "contexts.json").read_text())

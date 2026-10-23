@@ -1,10 +1,10 @@
 //! Shared fixtures; `tests/test_conformance.py` runs the same cases.
 
-use serde_json::{Value, json};
-use viewercontext::{
+use sentry_viewercontext::{
     Actor, ActorType, DEFAULT_LEEWAY, SUPERUSER_ACCESS_TTL, SuperuserAccess, ViewerContext,
     decode_jwt, encode_jwt, verify_jwt,
 };
+use serde_json::{Value, json};
 
 fn fixture(name: &str) -> Value {
     let path = format!("{}/fixtures/{name}", env!("CARGO_MANIFEST_DIR"));

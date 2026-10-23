@@ -9,7 +9,7 @@ from typing import Any
 
 import jwt
 
-from viewercontext.model import ViewerContext
+from sentry_viewercontext.model import ViewerContext
 
 HEADER = "X-Viewer-Context"
 ISSUER = "sentry"
