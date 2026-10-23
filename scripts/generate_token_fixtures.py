@@ -14,7 +14,7 @@ from unittest import mock
 
 import jwt
 
-from viewercontext import ViewerContext, encode_jwt, key_id
+from sentry_viewercontext import ViewerContext, encode_jwt, key_id
 
 KEY = "fixture-shared-secret-0123456789abcdef"
 OTHER_KEY = "fixture-other-secret-0123456789abcdef"

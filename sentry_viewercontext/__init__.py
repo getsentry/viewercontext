@@ -1,4 +1,4 @@
-from viewercontext.model import (
+from sentry_viewercontext.model import (
     WIRE_VERSION,
     Actor,
     ActorId,
@@ -6,8 +6,8 @@ from viewercontext.model import (
     SuperuserAccess,
     ViewerContext,
 )
-from viewercontext.scope import get_viewer_context, viewer_context_scope, viewer_context_var
-from viewercontext.token import (
+from sentry_viewercontext.scope import get_viewer_context, viewer_context_scope, viewer_context_var
+from sentry_viewercontext.token import (
     DEFAULT_TTL,
     HEADER,
     SUPERUSER_ACCESS_TTL,

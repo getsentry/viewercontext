@@ -16,10 +16,10 @@ dependencies = ["PyJWT>=2.13.0"]
 Repository = "https://github.com/getsentry/viewercontext"
 
 [tool.setuptools]
-packages = ["viewercontext"]
+packages = ["sentry_viewercontext"]
 
 [tool.setuptools.package-data]
-viewercontext = ["py.typed"]
+sentry_viewercontext = ["py.typed"]
 
 [dependency-groups]
 dev = ["pytest>=9.0.3", "pytest-cov>=4.0.0", "mypy>=2.1.0", "ruff>=0.14.0"]
@@ -27,7 +27,7 @@ dev = ["pytest>=9.0.3", "pytest-cov>=4.0.0", "mypy>=2.1.0", "ruff>=0.14.0"]
 [tool.mypy]
 python_version = "3.13"
 strict = true
-files = ["viewercontext", "tests", "scripts"]
+files = ["sentry_viewercontext", "tests", "scripts"]
 warn_unreachable = true
 enable_error_code = [
     "deprecated",
@@ -88,7 +88,7 @@ ignore = [
 
 [tool.coverage.run]
 branch = true
-source = ["viewercontext"]
+source = ["sentry_viewercontext"]
 
 [tool.coverage.report]
 fail_under = 100
