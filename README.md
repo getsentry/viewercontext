@@ -83,3 +83,7 @@ stable, `cargo doc` with warnings denied, and `cargo publish --dry-run`.
 
 Run the **Release** workflow with the new version. Craft bumps both manifests
 (`scripts/bump-version.sh`) and publishes to GitHub, PyPI, internal PyPI and crates.io.
+
+## License
+
+[FSL-1.1-ALv2](LICENSE.md), the same license as [getsentry/sentry](https://github.com/getsentry/sentry).
