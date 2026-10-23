@@ -120,4 +120,16 @@ fn actor_identity() {
         Actor::new(ActorType::ServiceAccount, Some(9)).user_id(),
         None
     );
+    for actor_type in [
+        ActorType::ServiceAccount,
+        ActorType::System,
+        ActorType::Integration,
+        ActorType::Unknown,
+    ] {
+        let actor = Actor {
+            delegated_user_id: Some(1),
+            ..Actor::new(actor_type, Some(9))
+        };
+        assert_eq!(actor.user_id(), None);
+    }
 }

@@ -32,6 +32,8 @@ def test_actor_user_id() -> None:
     assert Actor(ActorType.USER, actor_id=1).user_id == 1
     assert Actor(ActorType.AGENT, actor_id=5, delegated_user_id=1).user_id == 1
     assert Actor(ActorType.SERVICE_ACCOUNT, actor_id=9).user_id is None
+    for actor_type in set(ActorType) - {ActorType.USER, ActorType.AGENT}:
+        assert Actor(actor_type, actor_id=9, delegated_user_id=1).user_id is None
 
 
 def test_round_trip_through_jwt() -> None:
