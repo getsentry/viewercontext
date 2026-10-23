@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sentry-viewercontext"
-version = "0.1.0"
+version = "0.2.0"
 description = "Caller identity propagated between Sentry services"
 readme = "README.md"
 license = "FSL-1.1-ALv2"
