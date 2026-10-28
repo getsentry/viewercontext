@@ -29,6 +29,10 @@
       "wire": {"version": 2, "actor": {"type": "integration", "id": 3}, "organization_id": 1}
     },
     {
+      "name": "unknown_org_scoped",
+      "wire": {"version": 2, "actor": {"type": "unknown"}, "organization_id": 1}
+    },
+    {
       "name": "early_adopter",
       "wire": {"version": 2, "actor": {"type": "user", "id": 42}, "organization_id": 1, "organization_is_early_adopter": true}
     }
@@ -56,7 +60,6 @@
     {"name": "missing_actor", "wire": {"version": 2, "organization_id": 1}},
     {"name": "actor_without_type", "wire": {"version": 2, "actor": {"id": 42}}},
     {"name": "unknown_actor_type", "wire": {"version": 2, "actor": {"type": "robot", "id": 42}}},
-    {"name": "removed_unknown_actor_type", "wire": {"version": 2, "actor": {"type": "unknown"}, "organization_id": 1}},
     {"name": "string_actor_id", "wire": {"version": 2, "actor": {"type": "user", "id": "42"}}},
     {"name": "float_organization_id", "wire": {"version": 2, "actor": {"type": "system"}, "organization_id": 1.5}},
     {"name": "string_project_id", "wire": {"version": 2, "actor": {"type": "system"}, "organization_id": 1, "project_id": "7"}},
