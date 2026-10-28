@@ -22,6 +22,8 @@ pub enum ActorType {
     Integration,
     /// An AI agent, optionally acting for a delegating user.
     Agent,
+    /// Identity could not be determined.
+    Unknown,
 }
 
 /// Composite identity key: `(type, id)` is unique where `id` alone is not.

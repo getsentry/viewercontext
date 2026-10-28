@@ -59,7 +59,7 @@ Rust has no ambient context; carry the `ViewerContext` in request extensions or 
 ```
 
 Only `version` and `actor.type` are required. Actor types: `user`, `service_account`, `system`,
-`integration`, `agent`. As a JWT it is signed HS256 with `iat`, `exp`, `iss: "sentry"`
+`integration`, `agent`, `unknown`. As a JWT it is signed HS256 with `iat`, `exp`, `iss: "sentry"`
 and a `kid` header (first 8 hex chars of the key's SHA-256). Superuser access caps `exp` at
 5 minutes and at `superuser.expires_at`.
 

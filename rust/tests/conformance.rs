@@ -124,6 +124,7 @@ fn actor_identity() {
         ActorType::ServiceAccount,
         ActorType::System,
         ActorType::Integration,
+        ActorType::Unknown,
     ] {
         let actor = Actor {
             delegated_user_id: Some(1),

@@ -15,6 +15,7 @@ class ActorType(enum.StrEnum):
     SYSTEM = "system"
     INTEGRATION = "integration"
     AGENT = "agent"
+    UNKNOWN = "unknown"
 
 
 class ActorId(NamedTuple):
