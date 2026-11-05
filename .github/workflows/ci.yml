@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@884ad927a57e558e7a70b92f2bccf9198a4be546 # v6
+      - uses: astral-sh/setup-uv@0a73d6eb01c0201c8fc84847d0f4425b704ad66d # v6
         with:
           python-version: ${{ matrix.python }}
           enable-cache: false
@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@884ad927a57e558e7a70b92f2bccf9198a4be546 # v6
+      - uses: astral-sh/setup-uv@0a73d6eb01c0201c8fc84847d0f4425b704ad66d # v6
         with:
           enable-cache: false
       - run: uvx zizmor@1.31.1 --offline .github/workflows
