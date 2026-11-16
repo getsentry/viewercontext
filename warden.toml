@@ -19,8 +19,7 @@ type = "pull_request"
 actions = ["opened", "synchronize", "reopened"]
 
 [[skills]]
-name = "find-bugs"
-remote = "getsentry/skills"
+name = "code-review"
 paths = ["sentry_viewercontext/**/*.py", "rust/src/**/*.rs", "scripts/**/*.py"]
 
 [[skills.triggers]]
