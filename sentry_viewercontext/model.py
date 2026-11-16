@@ -10,11 +10,23 @@ _V1_FIELDS = frozenset({"user_id", "actor_type", "superuser", "token"})
 
 
 class ActorType(enum.StrEnum):
+    # A user acting directly under their own identity.
     USER = "user"
+
+    # A service account acting under its own identity, with no acting user.
     SERVICE_ACCOUNT = "service_account"
+
+    # Sentry-initiated work that users do not control, such as scheduled cleanup.
     SYSTEM = "system"
+
+    # An external integration acting within an organization, such as a webhook.
     INTEGRATION = "integration"
+
+    # An agent acting on behalf of the user identified by delegated_user_id.
     AGENT = "agent"
+
+    # The caller's identity could not be resolved.
+    # TODO(Greg): Remove UNKNOWN once callers no longer depend on it.
     UNKNOWN = "unknown"
 
 
