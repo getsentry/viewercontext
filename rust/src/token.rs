@@ -65,7 +65,7 @@ pub fn encode_jwt(ctx: &ViewerContext, key: &str, ttl: i64) -> Result<String, Er
     Ok(jsonwebtoken::encode(
         &header,
         &claims,
-        &EncodingKey::from_secret(key.as_bytes()),
+        &EncodingKey::from_secret(key.as_bytes())?,
     )?)
 }
 
@@ -94,7 +94,7 @@ pub fn verify_jwt<K: AsRef<str>>(
     validation.validate_exp = false;
     let claims: Map<String, Value> = jsonwebtoken::decode(
         token,
-        &DecodingKey::from_secret(key.as_bytes()),
+        &DecodingKey::from_secret(key.as_bytes())?,
         &validation,
     )?
     .claims;
